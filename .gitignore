@@ -1,0 +1,5 @@
+dados/
+.ipynb_checkpoints
+*.pyc
+*.idea
+.env
