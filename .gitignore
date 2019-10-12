@@ -4,3 +4,5 @@ dados/
 *.pyc
 *.idea
 .env
+data/
+data_goesr/

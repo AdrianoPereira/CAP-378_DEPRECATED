@@ -44,6 +44,7 @@ def download_o(**kargs):
     query = aws.ls('%s/%d/%s'%(bucket, year, julian_day))
     hours = np.array(query)
     path = 'data/%d/%d/%d'%(year, month, day)
+    path = "data_goesr/%s/%s/%s/ch_%s"%(year, month, day, ch)
     
     if not os.path.exists(path):
         os.makedirs(path)
@@ -59,6 +60,7 @@ def download_o(**kargs):
                 
                 
 def download(**kargs):
+    import datetime as dt
     if kargs.get('day'):
         day = kargs.get('day')
     if kargs.get('month'):
@@ -67,6 +69,7 @@ def download(**kargs):
         year = kargs.get('year')
     if kargs.get('ch'):
         ch = kargs.get('ch')
+        
     
     aws = s3fs.S3FileSystem(anon=True)    
     julian_day = to_julian_day(year, month, day)
@@ -85,7 +88,26 @@ def download(**kargs):
             print(file)
             if file.find('M3C'+str(ch)) >= 1:
                 print('Downloading %s...'%file.split('/')[-1])
+                
+                time = dt.datetime.now()
+                year_, month_, day_ = str(time.year), str(time.month).zfill(2), str(time.day).zfill(2)
+                hour_, minute_, second_ = str(time.hour).zfill(2), str(time.minute).zfill(2), str(time.second).zfill(2)
+            
+                time = '%s-%s-%s %s:%s:%s'%(day_, month_, year_, hour_, minute_, second_)
+                with open('/home/adriano/Dropbox/log_download_goes.txt', 'a') as f:
+                    f.write('%s : STARTED DOWNOLAD, CH %s\n'%(time, ch))
+                
                 aws.get(file, '%s/%s'%(path, file.split('/')[-1]))
+                
+                time0 = time
+                time = dt.datetime.now()
+                year_, month_, day_ = str(time.year), str(time.month).zfill(2), str(time.day).zfill(2)
+                hour_, minute_, second_ = str(time.hour).zfill(2), str(time.minute).zfill(2), str(time.second).zfill(2)
+            
+                time = '%s-%s-%s %s:%s:%s¨'%(day_, month_, year_, hour_, minute_, second_)
+                with open('/home/adriano/Dropbox/log_download_goes.txt', 'a') as f:
+                    f.write('%s : FINISHED\n'%(time))
+                    
 
 
 if __name__ == "__main__":
