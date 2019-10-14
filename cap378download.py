@@ -3,7 +3,7 @@ import numpy as np
 
 years = [2017]
 months = [10]
-days = list(range(25, 32))
+days = list(range(4, 10))
 channels = list(range(1, 17))
 
 for year in years:
